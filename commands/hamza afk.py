@@ -49,18 +49,35 @@ class afk(commands.Cog):
     async def on_message(self, message: discord.Message):
         if afkState == False:
             return
-        if message.mentions:
+        if message.mentions or message.role_mentions:
+            user_id_to_check = 496673945211240462
+            author_id_to_ignore = 1010270368814092400
+            role_id_to_check = 1042142018740162680
+            
             for user in message.mentions:
-                if user.id == 496673945211240462 and not (message.mention_everyone):
-                    if message.author.id == 1010270368814092400:
+                if user.id == user_id_to_check and not message.mention_everyone:
+                    if message.author.id == author_id_to_ignore:
                         return
                     embed = discord.Embed(
-                    color=discord.Colour.blurple(),
-                    title="Not Avaliable.",
-                    description="Hamza is currently unavailable. He will get back to you as soon as possible, likely because he is either asleep or busy.")
+                        color=discord.Colour.blurple(),
+                        title="Not Available.",
+                        description="Hamza is currently unavailable. He will get back to you as soon as possible, likely because he is either asleep or busy."
+                    )
                     embed.set_footer(text=f"HEO Systems Bot | version: {config.AVA_VERSION}", icon_url=config.FOOTER_ICON)
                     await message.reply(embed=embed)
                     return
+            
+            for role in message.role_mentions:
+                if role.id == role_id_to_check and not message.mention_everyone:
+                    embed = discord.Embed(
+                        color=discord.Colour.blurple(),
+                        title="Not Available.",
+                        description="Hamza is currently unavailable. He will get back to you as soon as possible, likely because he is either asleep or busy."
+                    )
+                    embed.set_footer(text=f"HEO Systems Bot | version: {config.AVA_VERSION}", icon_url=config.FOOTER_ICON)
+                    await message.reply(embed=embed)
+                    return
+
 
 async def setup(client:commands.Bot) -> None:
     await client.add_cog(afk(client))
